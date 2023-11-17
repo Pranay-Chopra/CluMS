@@ -9,6 +9,7 @@
     <property name="title" translatable="yes">Add a New Event</property>
     <property name="resizable">False</property>
     <property name="default-width">650</property>
+    <property name="icon">icon.png</property>
     <property name="type-hint">dialog</property>
     <signal name="delete-event" handler="dia_del" swapped="no"/>
     <child internal-child="vbox">
@@ -234,6 +235,7 @@
     <property name="title" translatable="yes">Add a New Member</property>
     <property name="resizable">False</property>
     <property name="default-width">600</property>
+    <property name="icon">icon.png</property>
     <property name="type-hint">dialog</property>
     <signal name="delete-event" handler="dia_del" swapped="no"/>
     <child internal-child="vbox">
@@ -436,6 +438,7 @@
     <property name="title" translatable="yes">Add a New Team</property>
     <property name="resizable">False</property>
     <property name="default-width">530</property>
+    <property name="icon">icon.png</property>
     <property name="type-hint">dialog</property>
     <signal name="delete-event" handler="dia_del" swapped="no"/>
     <child internal-child="vbox">
