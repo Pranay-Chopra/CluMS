@@ -1,0 +1,58 @@
+[
+    {
+        "s_no": 1,
+        "name": "trivial pursuit",
+        "domain": "open",
+        "part_no": "2",
+        "head": "gitansh khurana"
+    },
+    {
+        "s_no": 2,
+        "name": "pygrammer",
+        "domain": "10-12",
+        "part_no": "2",
+        "head": "akash niranjan"
+    },
+    {
+        "s_no": 3,
+        "name": "counterstrafe",
+        "domain": "9-12",
+        "part_no": "5+1",
+        "head": "aryan chaturvedi"
+    },
+    {
+        "s_no": 4,
+        "name": "take de-bait",
+        "domain": "6-12",
+        "part_no": "1",
+        "head": "mehul jain"
+    },
+    {
+        "s_no": 5,
+        "name": "sakura",
+        "domain": "9-12",
+        "part_no": "2",
+        "head": "prateek rout"
+    },
+    {
+        "s_no": 6,
+        "name": "inkbox",
+        "domain": "3-5",
+        "part_no": "1",
+        "head": "haniya ansari"
+    },
+    {
+        "s_no": 7,
+        "name": "battlebot",
+        "domain": "6-12",
+        "part_no": "2",
+        "head": "rakin anwar"
+    },
+    {
+        "s_no": 8,
+        "name": "prompter",
+        "domain": "9-12",
+        "part_no": "2",
+        "head": "utkarsh tiwari"
+    }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "s_no": 1,
+        "team_name": "core team",
+        "team_members": "prateek rout,pranay chopra,neil virmani,gitansh khurana,mehul jain,utkarsh tiwari,aryan gupta"
+    },
+    {
+        "s_no": 2,
+        "team_name": "website team",
+        "team_members": "pranay chopra,neil virmani,vandit marwaha,vihaan babbar,priyansh nagar"
+    },
+    {
+        "s_no": 3,
+        "team_name": "invite team",
+        "team_members": "pranay chopra,neil virmani,gitansh khurana"
+    },
+    {
+        "s_no": 4,
+        "team_name": "video team",
+        "team_members": "mehul jain,utkarsh tiwari,aryan gupta"
+    }
+]
