@@ -625,7 +625,7 @@
             <property name="height-request">730</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="transition-type">crossfade</property>
+            <property name="transition-type">slide-left</property>
             <child>
               <object class="GtkLayout">
                 <property name="visible">True</property>
@@ -787,6 +787,7 @@
                   </object>
                   <packing>
                     <property name="x">10</property>
+                    <property name="y">20</property>
                   </packing>
                 </child>
               </object>
@@ -933,6 +934,7 @@
                   </object>
                   <packing>
                     <property name="x">10</property>
+                    <property name="y">20</property>
                   </packing>
                 </child>
               </object>
@@ -1123,6 +1125,7 @@
                   </object>
                   <packing>
                     <property name="x">10</property>
+                    <property name="y">20</property>
                   </packing>
                 </child>
               </object>
@@ -1149,6 +1152,7 @@
           </object>
           <packing>
             <property name="x">332</property>
+            <property name="y">20</property>
           </packing>
         </child>
       </object>
