@@ -23,7 +23,7 @@ class Login:
         passwd = hashlib.sha256((self.builder.get_object("PassIn").get_text()).encode()).hexdigest()
         
         #check for login
-        if uname == "force" and passwd == "e98278e51b6076b954e29a534d7f6edb57650c68d1ee43f0feb2dba3f4b912b2":
+        if uname == "force" and passwd == "270361f4f17812817257e77e481a34c76b2f54d8db61395e9cfc6321d3352fde":
             self.builder.get_object("Window").destroy()
             Main()
         else:
