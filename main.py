@@ -1,6 +1,9 @@
 import gi, hashlib, json
+import itertools as it
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk as gtk
+import inspect
+
 
 #login window
 class Login:
@@ -31,7 +34,7 @@ class Login:
 
 
 #main window
-class Main():
+class Main:
     def __init__(self):
         #builder set up
         gladeFile = "main.glade"
@@ -78,6 +81,48 @@ class Main():
         self.builder.get_object("eve_wrong").set_text("")
         self.builder.get_object("eve_dia").show()
 
+    def edit_data(self, f, data = None, path = None, col = None, text = None) -> None:
+        if data == None:
+            data = json.load(f)
+        if 'apply' in inspect.stack()[1][3]:
+            f.seek(0)
+            json.dump(data, f, indent=4)
+            f.truncate()
+            f.close()
+        if 'edited' in inspect.stack()[1][3]:            
+            data[int(path)][col] = text
+            f.seek(0)
+            json.dump(data, f, indent=4)
+            f.truncate()
+            f.close()
+        if 'del' in inspect.stack()[1][3]:
+            del data[self.selected - 1]
+            for i in data:
+                i["s_no"] = data.index(i) + 1
+            f.seek(0)
+            json.dump(data, f, indent=4)
+            f.truncate()
+            f.close()
+        if 'mem' in inspect.stack()[1][3]:
+            self.builder.get_object("members_list").clear()
+            fjson = json.loads(open('members.json',"r").read())
+            for i in fjson:
+                self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
+        if 'team' in inspect.stack()[1][3]:
+            self.builder.get_object("teams_list").clear()
+            fjson = json.loads(open('teams.json',"r").read())
+            for i in fjson:
+                self.builder.get_object("teams_list").append([i["s_no"],i["team_name"].title(),", ".join(i["team_members"].split(',')).title()])
+        if 'eve' in inspect.stack()[1][3]:
+            self.builder.get_object("events_list").clear()
+            fjson = json.loads(open('events.json',"r").read())
+            for i in fjson:
+                self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+        
+
+
+        
+
     #bug fix -> add new dialogues
     def dia_del(self, dialogue, event):
         dialogue.hide()
@@ -85,105 +130,41 @@ class Main():
 
     #editable treeview
     def mem_name_edited(self, widget, path, text):
-        for i in text.split():
-            if not i.isalpha():
-                break
-        else:
-            with open("members.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["name"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("members_list").clear()
-            fjson = json.loads(open("members.json","r").read())
-            for i in fjson:
-                self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
+        if text.isalpha():
+            with open('members.json', 'r+') as f:
+                Main.edit_data(self, f, path=path, col='name', text=text)
 
     def mem_post_edited(self, widget, path, text):
         with open("members.json", "r+") as f:
-            data = json.load(f)
-            data[int(path)]["post"] = text
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("members_list").clear()
-        fjson = json.loads(open("members.json","r").read())
-        for i in fjson:
-            self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
+           Main.edit_data(self, f, path=path, col='post', text=text) 
 
     def mem_mob_edited(self, widget, path, text):
         if text.isdigit():
             with open("members.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["mob_no"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("members_list").clear()
-            fjson = json.loads(open("members.json","r").read())
-            for i in fjson:
-                self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
+                Main.edit_data(self, f, path=path, col='mob_no', text=text)
 
     def team_name_edited(self, widget, path, text):
         with open("teams.json", "r+") as f:
-            data = json.load(f)
-            data[int(path)]["team_name"] = text
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("teams_list").clear()
-        fjson = json.loads(open("teams.json","r").read())
-        for i in fjson:
-            self.builder.get_object("teams_list").append([i["s_no"],i["team_name"].title(),", ".join(i["team_members"].split(',')).title()])
+            Main.edit_data(self, f, path=path, col='team_name', text=text)
 
     def team_members_edited(self, widget, path, text):
-        names = []
         for i in text.split(','):
-            names.append(i)
-        names=''.join(names)
-        for j in names.split():
-            if not j.isalpha():
+            if not i.isalpha():
                 break
         else:
             with open("teams.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["team_members"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("teams_list").clear()
-            fjson = json.loads(open("teams.json","r").read())
-            for i in fjson:
-                self.builder.get_object("teams_list").append([i["s_no"],i["team_name"].title(),", ".join(i["team_members"].split(',')).title()])
+                Main.edit_data(self, f, path=path, col='team_members', text=text)
 
     def eve_name_edited(self, widget, path, text):
         with open("events.json", "r+") as f:
-            data = json.load(f)
-            data[int(path)]["name"] = text
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("events_list").clear()
-        fjson = json.loads(open("events.json","r").read())
-        for i in fjson:
-            self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+            Main.edit_data(self, f, path=path, col='name', text=text)
 
     def eve_domain_edited(self, widget, path, text):
         for i in text:
-            if i not in "0123456789-" and text.lower() != "open":
+            if i not in "0123456789-":
                 break
         else:
-            with open("events.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["domain"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("events_list").clear()
-            fjson = json.loads(open("events.json","r").read())
-            for i in fjson:
-                self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+            Main.edit_data(self, f, path=path, col='domain', text=text)
 
     def eve_part_no_edited(self, widget, path, text):
         for i in text:
@@ -191,76 +172,27 @@ class Main():
                 break
         else:
             with open("events.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["part_no"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("events_list").clear()
-            fjson = json.loads(open("events.json","r").read())
-            for i in fjson:
-                self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+                Main.edit_data(self, f, path=path, col='part_no', text=text)
 
     def eve_head_edited(self, widget, path, text):
-        for i in text.split():
-            if not i.isalpha():
-                break
-        else:
+        if text.isalpha():
             with open("events.json", "r+") as f:
-                data = json.load(f)
-                data[int(path)]["head"] = text
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("events_list").clear()
-            fjson = json.loads(open("events.json","r").read())
-            for i in fjson:
-                self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+                Main.edit_data(self, f, path=path, col='head', text=text)
 
     #delete entry handlers
     def on_mem_del_clicked(self, widget):
         with open("members.json", "r+") as f:
-            data = json.load(f)
-            del data[self.selected - 1]
-            for i in data:
-                i["s_no"] = data.index(i) + 1
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("members_list").clear()
-        fjson = json.loads(open("members.json","r").read())
-        for i in fjson:
-            self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
+            Main.edit_data(self, f)
 
 
     def on_team_del_clicked(self, widget):
         with open("teams.json", "r+") as f:
-            data = json.load(f)
-            del data[self.selected - 1]
-            for i in data:
-                i["s_no"] = data.index(i) + 1
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("teams_list").clear()
-        fjson = json.loads(open("teams.json","r").read())
-        for i in fjson:
-            self.builder.get_object("teams_list").append([i["s_no"],i["team_name"].title(),", ".join(i["team_members"].split(',')).title()])
+            Main.edit_data(self, f)
             
 
     def on_eve_del_clicked(self, widget):
         with open("events.json", "r+") as f:
-            data = json.load(f)
-            del data[self.selected - 1]
-            for i in data:
-                i["s_no"] = data.index(i) + 1
-            f.seek(0)
-            json.dump(data, f, indent=4)
-            f.truncate()
-        self.builder.get_object("events_list").clear()
-        fjson = json.loads(open("events.json","r").read())
-        for i in fjson:
-            self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
+            Main.edit_data(self, f)
             
 
 
@@ -291,54 +223,41 @@ class Main():
         new_mem_name = self.builder.get_object("new_mem_name").get_text().lower()
         new_mem_post = self.builder.get_object("new_mem_post").get_text().lower()
         new_mem_mob_no = self.builder.get_object("new_mem_mob_no").get_text().lower()
-        for i in new_mem_name.split():
-            if ((new_mem_mob_no[0] in '012345') or (len(new_mem_mob_no) != 10) or (not new_mem_mob_no.isdigit())) and (not i.isalpha()):
-                self.builder.get_object("mem_wrong").set_text("!! Malformed Name and Mobile Number!!")
-                break
-            elif (not i.isalpha()):
-                self.builder.get_object("mem_wrong").set_text("!! Malformed Name !!")
-                break
-            elif (new_mem_mob_no[0] in '012345') or (len(new_mem_mob_no) != 10) or (not new_mem_mob_no.isdigit()):
-                self.builder.get_object("mem_wrong").set_text("!! Malformed Mobile Number !!")
-                break
+        if ((new_mem_mob_no[0] in '012345') or (len(new_mem_mob_no) != 10) or (not new_mem_mob_no.isdigit())) and (not new_mem_name.isalpha()):
+            self.builder.get_object("mem_wrong").set_text("!! Malformed Name and Mobile Number!!")
+        elif (new_mem_mob_no[0] in '012345') or (len(new_mem_mob_no) != 10) or (not new_mem_mob_no.isdigit()):
+            self.builder.get_object("mem_wrong").set_text("!! Malformed Mobile Number !!")
         else:
-            with open("members.json", "r+") as f:
-                data = json.load(f)
-                data.append({"s_no":len(data)+1,"name":new_mem_name,"post":new_mem_post,"mob_no":new_mem_mob_no})
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("members_list").clear()
-            fjson = json.loads(open("members.json","r").read())
-            for i in fjson:
-                self.builder.get_object("members_list").append([i["s_no"],i["name"].title(),i["post"].title(),i["mob_no"]])
-            self.builder.get_object("mem_dia").hide()
+            for i in new_mem_name:
+                if i.lower() not in 'abcdefghijklmnopqrstuvwxyz ':
+                    self.builder.get_object("mem_wrong").set_text("!! Malformed Name !!")
+                    break
+            else:
+                with open("members.json", "r+") as f:
+                    data = json.load(f)
+                    data.append({"s_no":len(data)+1,"name":new_mem_name,"post":new_mem_post,"mob_no":new_mem_mob_no})
+                    Main.edit_data(self, f, data=data)
+                self.builder.get_object('mem_dia').hide()
+                
 
 
     def on_team_dia_apply_clicked(self, widget):
         new_team_name = self.builder.get_object("new_team_name").get_text().lower()
         new_team_members = self.builder.get_object("new_team_members").get_text().lower()
-        names = []
-        for i in new_team_members.split(','):
-            names.append(i)
-        names=''.join(names)
-        for j in names.split():
-            if not j.isalpha():
-                self.builder.get_object("team_wrong").set_text("!! Malformed Member Names !!")
-                break
-        else:
+        temp = new_team_members.split(',')
+        flag = False
+        for i in temp:
+                for j in i:
+                    if j.lower() not in 'abcdefghijklmnopqrstuvwxyz ':
+                        self.builder.get_object("team_wrong").set_text("!! Malformed Member Names !!")
+                        flag = True                              
+        if not flag:
             with open("teams.json", "r+") as f:
                 data = json.load(f)
                 data.append({"s_no":len(data)+1,"team_name":new_team_name,"team_members":new_team_members})
-                f.seek(0)
-                json.dump(data, f, indent=4)
-                f.truncate()
-            self.builder.get_object("teams_list").clear()
-            fjson = json.loads(open("teams.json","r").read())
-            for i in fjson:
-                self.builder.get_object("teams_list").append([i["s_no"],i["team_name"].title(),", ".join(i["team_members"].split(',')).title()])
-            self.builder.get_object("team_dia").hide()
-
+                Main.edit_data(self, f, data=data)
+            self.builder.get_object('teams_dia').hide()
+            
     def on_eve_dia_apply_clicked(self, widget):
         new_eve_name = self.builder.get_object("new_eve_name").get_text().lower()
         new_eve_domain = self.builder.get_object("new_eve_domain").get_text().lower()
@@ -346,34 +265,29 @@ class Main():
         new_eve_head = self.builder.get_object("new_eve_head").get_text().lower()
         temp1 = list(new_eve_domain)
         temp2 = list(new_eve_part_no)
-        print(temp1, temp2)
-        for i in temp1:
-            print(i)
-            if (i not in '0123456789-') and (new_eve_domain != "open"):
+        flag = False
+        for i,j in it.zip_longest(temp1, temp2):
+            if not (i in '0123456789-') and (new_eve_domain != "open"):
                 self.builder.get_object("eve_wrong").set_text("!! Malformed Domain !!")
+                print(not (i in '0123456789-' ), (new_eve_domain != "open"))
                 break
-        else:
-            for j in temp2:
-                if not (j in "0123456789+"):
+            elif j != None and new_eve_domain != None: 
+                if j not in '0123456789+':
                     self.builder.get_object("eve_wrong").set_text("!! Malformed No. of Participants !!")
                     break
             else:
-                for k in new_eve_head.split():
-                    if (not k.isalpha()):
+                for k in new_eve_head:
+                    if k.lower() not in 'abcdefghijklmnopqrstuvwxyz ':
                         self.builder.get_object("eve_wrong").set_text("!! Malformed Head Name !!")
-                        break
-                else:
-                    with open("events.json", "r+") as f:
-                        data = json.load(f)
-                        data.append({"s_no":len(data)+1,"name":new_eve_name,"domain":new_eve_domain,"part_no":new_eve_part_no,"head":new_eve_head})
-                        f.seek(0)
-                        json.dump(data, f, indent=4)
-                        f.truncate()
-                    self.builder.get_object("events_list").clear()
-                    fjson = json.loads(open("events.json","r").read())
-                    for i in fjson:
-                        self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
-                    self.builder.get_object("eve_dia").hide()
+                        flag = True
+        else:
+            if not flag:
+                with open("events.json", "r+") as f:
+                    data = json.load(f)
+                    data.append({"s_no":len(data)+1,"name":new_eve_name,"domain":new_eve_domain,"part_no":new_eve_part_no,"head":new_eve_head})
+                    Main.edit_data(self, f, data=data)
+                self.builder.get_object('eve_dia').hide()
+
 
 
 
