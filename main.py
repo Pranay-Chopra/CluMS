@@ -87,7 +87,7 @@ class Login:
                 password = sql_passwd
             )
             cur = Login.db.cursor()
-            cur.execute(f'CREATE DATABASE {'clums_db' if sql_db_name == '' else sql_db_name}')
+            cur.execute(f'CREATE DATABASE {"clums_db" if sql_db_name == "" else sql_db_name}')
             cur.close()
             Login.db = mysql.connector.connect(
                 host = 'localhost' if sql_host == '' else sql_host,
@@ -98,10 +98,10 @@ class Login:
         self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
         with open('mysql.conf', 'w+') as f:
             f.write(f'\
-                    host = {'localhost' if sql_host == '' else sql_host}\n\
+                    host = {"localhost" if sql_host == "" else sql_host}\n\
                     user = {sql_uname}\n\
                     password = {sql_passwd}\n\
-                    database = {'clums_db' if sql_db_name == '' else sql_db_name}')
+                    database = {"clums_db" if sql_db_name == "" else sql_db_name}')
             f.close()
         Login.mysql_flag = True
 
@@ -266,7 +266,7 @@ class Main(Login):
                         temp_list[i] = f'{str(temp_list[i])}'
                     elif type(temp_list[i]) is str:
                         temp_list[i] = f'\'{temp_list[i]}\''
-                self.cur.execute(f'INSERT INTO {table} ({col}) VALUES ({','.join(temp_list)})')
+                self.cur.execute(f'INSERT INTO {table} ({col}) VALUES ({",".join(temp_list)})')
             Login.db.commit()
         if 'mem' in inspect.stack()[1][3]:
             self.builder.get_object("members_list").clear()
@@ -524,13 +524,3 @@ class Main(Login):
 if __name__ == "__main__":
     main = Login()
     gtk.main()    
-
-
-
-
-
-
-# cur.execute("CREATE TABLE members (s_no int, name varchar(255), post varchar(255), mob_no varchar(255))")
-# cur.execute("CREATE TABLE teams (s_no int, team_name varchar(255), team_members varchar(255))")
-# cur.execute("CREATE TABLE events (s_no int, name varchar(255), domain varchar(255), part_no varchar(255), head varchar(255))")
-
