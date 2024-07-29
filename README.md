@@ -12,6 +12,6 @@ CluMS (or Club Management Software) is a proprietary software developed by [FORC
 The project was initially intended as the Grade 12 CBSE Computer Science project of the club leaders [Pranay Chopra](github.com/Pranay-Chopra) and [Neil Virmani](github.com/NVirCX) for AY 2024-25. However, due to its highly practical use case and its almost flawless nature, it was quickly adopted by the club and is now in use as the Official Club Management System.
 
 # General Info and Documentation
-1. The Software is built for LINUX ONLY and works with Gtk-3.0. The maintainers are working on a windows port, but so far there has been no positive progress made towards it. The UI looks good in DARK MODE ONLY, and it is recommended you use the theme suggested here: [![Theme - Flat-Remix-XXX-Darkest](https://img.shields.io/badge/Theme-Flat--Remix--XXX--Darkest-191919?logo=gnome)](https://github.com/daniruiz/Flat-Remix-Gtk).
+1. The Software is built for LINUX ONLY and works with Gtk-3.0. The maintainers are working on a windows port, but so far there has been no positive progress made towards it. The UI looks good in DARK MODE ONLY, and it is recommended you use the theme suggested here: [![Theme - Flat-Remix-XXX-Darkest](https://img.shields.io/badge/Theme-Flat--Remix--XXX--Darkest-191919?logo=gnome)](https://github.com/daniruiz/Flat-Remix-Gtk)
 
 2. The app works on password authentication. Right now, there is only one user and it is hardcoded into the app. For the future, however, the maintainers are working on a User Management System.
