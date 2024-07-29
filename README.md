@@ -6,5 +6,5 @@
 
 CluMS (or Club Management Software) is a proprietary software developed by [FORCE-Club](github.com/FORCE-Fest) for managing the members, teams and events organized and contained within the club.
 
-#Back Story
+# Back Story
 The project was initially intended as the Grade 12 CBSE Computer Science project of the club leaders [Pranay Chopra](github.com/Pranay-Chopra) and [Neil Virmani](github.com/NVirCX)
