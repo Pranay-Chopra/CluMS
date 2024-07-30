@@ -39,5 +39,5 @@ clums_db (Database) (Can be changed)
         '-> head (varchar 255)
 ```
 
-4. The Login screen allows the user to connect a MySQL database. By default, this option is disbled and the system uses JSON files to store the data. The data can be edited, added or deleted by the user.
+4. The Login screen allows the user to connect a MySQL database. By default, this option is disabled and the system uses JSON files to store the data. The data can be edited, added or deleted by the user.
 5. The changes are committed directly to the database and the JSON files, so rolling back to a previous version is not possible. Please exercise caution while manipulating the data.
