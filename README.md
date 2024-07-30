@@ -18,7 +18,7 @@ The project was initially intended as the Grade 12 CBSE Computer Science project
 3. Database Structure (everything is hardcoded except Database name):
    
 ```
-clums (Database) (Can be changed)  
+clums_db (Database) (Can be changed)  
   |  
   |-> members (Table)  
   |     |-> s_no (int)  
