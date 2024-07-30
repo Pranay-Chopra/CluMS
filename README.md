@@ -31,12 +31,12 @@ clums (Database) (Can be changed)
   |     |-> team_name (varchar 255)
   |     '-> team_members (varchar 255)
   |
-  |-> events (Table)
-  |     |-> s_no (int)
-  |     |-> name (varchar 255)
-  |     |-> domain (varchar 255)
-  |     |-> part_no (varchar 255)
-  '     '-> head (varchar 255)
+  '-> events (Table)
+        |-> s_no (int)
+        |-> name (varchar 255)
+        |-> domain (varchar 255)
+        |-> part_no (varchar 255)
+        '-> head (varchar 255)
 ```
 
 4. The Login screen allows the user to connect a MySQL database. By default, this option is disbled and the system uses JSON files to store the data. The data can be edited, added or deleted by the user.
