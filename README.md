@@ -13,4 +13,15 @@ The project was initially intended as the Grade 12 CBSE Computer Science project
 # General Info and Documentation
 1. The Software is built for [![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](Linux.org) ONLY and works with [![GTK - 3.0](https://img.shields.io/badge/GTK-3.0-green?logo=gtk)](https://gtk.org) The maintainers are working on a [![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)](https://www.microsoft.com/en-us/windows) port, but so far there has been no positive progress made towards it. The UI looks good in DARK MODE ONLY, and it is recommended you use [![Theme - Flat-Remix-XXX-Darkest](https://img.shields.io/badge/Theme-Flat--Remix--XXX--Darkest-191919?logo=gnome)](https://github.com/daniruiz/Flat-Remix-Gtk)
 
-2. The app works on password authentication. Right now, there is only one user and it is hardcoded into the app. For the future, however, the maintainers are working on a User Management System.
+2. The system works on password authentication. Right now, there is only one user and it is hardcoded into the system. For the future, however, the maintainers are working on a User Management System.
+
+3. Database Structure:
+   
+Database (default: CluMS)
+  |
+  '-> Table (members)
+        |
+        |-> s_no (int)
+        |-> name (varchar)
+        |-> post (varchar)
+        '-> mob_no (varchar)
