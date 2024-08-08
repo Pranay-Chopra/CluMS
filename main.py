@@ -95,17 +95,18 @@ class Login:
                 password = sql_passwd,
                 database = 'clums_db' if sql_db_name == '' else sql_db_name
             )
-        self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
-        with open('mysql.conf', 'w+') as f:
-            f.write(f'\
-                    host = {"localhost" if sql_host == "" else sql_host}\n\
-                    user = {sql_uname}\n\
-                    password = {sql_passwd}\n\
-                    database = {"clums_db" if sql_db_name == "" else sql_db_name}')
-            f.close()
-        Login.mysql_flag = True
+        if Login.db.is_connected():
+            self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
+            with open('mysql.conf', 'w+') as f:
+                f.write(f'\
+                        host = {"localhost" if sql_host == "" else sql_host}\n\
+                        user = {sql_uname}\n\
+                        password = {sql_passwd}\n\
+                        database = {"clums_db" if sql_db_name == "" else sql_db_name}')
+                f.close()
+            Login.mysql_flag = True
 
-        self.builder.get_object('sql_dialogue').hide()
+            self.builder.get_object('sql_dialogue').hide()
 
     
 
