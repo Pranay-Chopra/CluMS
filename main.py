@@ -93,7 +93,7 @@ class Login:
                 collation="utf8mb4_unicode_520_ci"
             )
             cur = Login.db.cursor()
-            cur.execute(f'CREATE DATABASE {'clums_db' if sql_db_name == '' else sql_db_name}')
+            cur.execute(f'CREATE DATABASE {"clums_db" if sql_db_name == "" else sql_db_name}')
             cur.close()
             Login.db = mysql.connector.connect(
                 host = 'localhost' if sql_host == '' else sql_host,
@@ -103,19 +103,20 @@ class Login:
                 charset="utf8mb4",
                 collation="utf8mb4_unicode_520_ci"
             )
-        self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
-        with open('mysql.conf', 'w+') as f:
-            f.write(f'\
-                    host = {'localhost' if sql_host == '' else sql_host}\n\
-                    user = {sql_uname}\n\
-                    password = {sql_passwd}\n\
-                    database = {'clums_db' if sql_db_name == '' else sql_db_name}\n\
+        if Login.db.is_connected():
+            self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
+            with open('mysql.conf', 'w+') as f:
+                f.write(f'\
+                        host = {"localhost" if sql_host == "" else sql_host}\n\
+                        user = {sql_uname}\n\
+                        password = {sql_passwd}\n\
+                        database = {"clums_db" if sql_db_name == "" else sql_db_name}\n\
                     charset="utf8mb4"\n\
                     collation="utf8mb4_unicode_520_ci"')
-            f.close()
-        Login.mysql_flag = True
+                f.close()
+            Login.mysql_flag = True
 
-        self.builder.get_object('sql_dialogue').hide()
+            self.builder.get_object('sql_dialogue').hide()
 
 
 
@@ -276,7 +277,7 @@ class Main(Login):
                         temp_list[i] = f'{str(temp_list[i])}'
                     elif type(temp_list[i]) is str:
                         temp_list[i] = f'\'{temp_list[i]}\''
-                self.cur.execute(f'INSERT INTO {table} ({col}) VALUES ({','.join(temp_list)})')
+                self.cur.execute(f'INSERT INTO {table} ({col}) VALUES ({",".join(temp_list)})')
             Login.db.commit()
         if 'mem' in inspect.stack()[1][3]:
             self.builder.get_object("members_list").clear()
