@@ -33,11 +33,13 @@ class Login:
                 host = data[0],
                 user = data[1],
                 password = data[2],
-                database = data[3]
+                database = data[3],
+                charset="utf8mb4",
+                collation="utf8mb4_unicode_520_ci"
             )
             Login.mysql_flag = True
             self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
-            
+
         except:
             self.builder.get_object('sql_status').set_markup('<span foreground=\"#e0e01b1b2424\">MySQL Disconnected</span>')
 
@@ -47,7 +49,7 @@ class Login:
         #get uname and pass values
         uname = self.builder.get_object("UnameIn").get_text()
         passwd = hashlib.sha256((self.builder.get_object("PassIn").get_text()).encode()).hexdigest()
-        
+
         #check for login
         if uname == "force" and passwd == "270361f4f17812817257e77e481a34c76b2f54d8db61395e9cfc6321d3352fde":
             self.builder.get_object("Window").destroy()
@@ -65,26 +67,30 @@ class Login:
     def dia_del(self, dialogue, event):
         dialogue.hide()
         return True
-    
+
     def save_sql_config(self, widget):
         sql_host = self.builder.get_object('sql_host').get_text()
         sql_uname = self.builder.get_object('sql_uname').get_text()
         sql_db_name = self.builder.get_object('sql_db_name').get_text()
         sql_passwd = self.builder.get_object('sql_passwd').get_text()
-        
+
         try:
             Login.db = mysql.connector.connect(
                 host = 'localhost' if sql_host == '' else sql_host,
                 user = sql_uname,
                 password = sql_passwd,
-                database = 'clums_db' if sql_db_name == '' else sql_db_name
+                database = 'clums_db' if sql_db_name == '' else sql_db_name,
+                charset="utf8mb4",
+                collation="utf8mb4_unicode_520_ci"
             )
-            
+
         except:
             Login.db = mysql.connector.connect(
                 host = 'localhost' if sql_host == '' else sql_host,
                 user = sql_uname,
-                password = sql_passwd
+                password = sql_passwd,
+                charset="utf8mb4",
+                collation="utf8mb4_unicode_520_ci"
             )
             cur = Login.db.cursor()
             cur.execute(f'CREATE DATABASE {'clums_db' if sql_db_name == '' else sql_db_name}')
@@ -93,7 +99,9 @@ class Login:
                 host = 'localhost' if sql_host == '' else sql_host,
                 user = sql_uname,
                 password = sql_passwd,
-                database = 'clums_db' if sql_db_name == '' else sql_db_name
+                database = 'clums_db' if sql_db_name == '' else sql_db_name,
+                charset="utf8mb4",
+                collation="utf8mb4_unicode_520_ci"
             )
         self.builder.get_object('sql_status').set_markup('<span foreground=\"#3333d1d17a7a\">MySQL Connected</span>')
         with open('mysql.conf', 'w+') as f:
@@ -101,13 +109,15 @@ class Login:
                     host = {'localhost' if sql_host == '' else sql_host}\n\
                     user = {sql_uname}\n\
                     password = {sql_passwd}\n\
-                    database = {'clums_db' if sql_db_name == '' else sql_db_name}')
+                    database = {'clums_db' if sql_db_name == '' else sql_db_name}\n\
+                    charset="utf8mb4"\n\
+                    collation="utf8mb4_unicode_520_ci"')
             f.close()
         Login.mysql_flag = True
 
         self.builder.get_object('sql_dialogue').hide()
 
-    
+
 
 #main window
 class Main(Login):
@@ -130,9 +140,9 @@ class Main(Login):
             self.cur = Login.db.cursor()
             self.cur.execute('SHOW TABLES')
             data = self.cur.fetchall()
-            table_list = data if len(data) != 0 else []    
-               
-            
+            table_list = data if len(data) != 0 else []
+
+
             for i in [('members',), ('teams',), ('events',)]:
                 if i not in table_list:
                     if i == ('members',):
@@ -150,7 +160,7 @@ class Main(Login):
                         self.cur.execute('SHOW TABLES')
                         data = self.cur.fetchall()
                         table_list = data if len(data) != 0 else []
-                
+
             self.cur.execute('SELECT * FROM members')
             members_data = self.cur.fetchall()
             self.cur.execute('SELECT * FROM teams')
@@ -165,7 +175,7 @@ class Main(Login):
             for i in events_data:
                 self.builder.get_object("events_list").append([i[0],i[1].title(),i[2].title(),i[3],i[4].title()])
 
-            
+
         else:
             members_data = json.loads(open("members.json","r").read())
             teams_data = json.loads(open("teams.json","r").read())
@@ -211,7 +221,7 @@ class Main(Login):
             json.dump(data, f, indent=4)
             f.truncate()
             f.close()
-        if 'edited' in inspect.stack()[1][3]:            
+        if 'edited' in inspect.stack()[1][3]:
             data[int(path)][col] = text
             f.seek(0)
             json.dump(data, f, indent=4)
@@ -240,15 +250,15 @@ class Main(Login):
             fjson = json.loads(open('events.json',"r").read())
             for i in fjson:
                 self.builder.get_object("events_list").append([i["s_no"],i["name"].title(),i["domain"].title(),i["part_no"],i["head"].title()])
-        
+
 
 
 
     def edit_sql_data(self, table, path = None, text = None, col = None) -> None:
-        if 'apply' in inspect.stack()[1][3]:            
+        if 'apply' in inspect.stack()[1][3]:
             self.cur.execute(f'INSERT INTO {table} ({col}) VALUES ({text})')
             Login.db.commit()
-        if 'edited' in inspect.stack()[1][3]:            
+        if 'edited' in inspect.stack()[1][3]:
             self.cur.execute(f'UPDATE {table} SET {col} = \'{text}\' WHERE s_no = {int(path)+1}')
             Login.db.commit()
         if 'del' in inspect.stack()[1][3]:
@@ -257,7 +267,7 @@ class Main(Login):
             self.cur.execute(f'SELECT * FROM {table}')
             data = self.cur.fetchall()
             self.cur.execute(f'DELETE FROM {table}')
-            
+
             for i in range(1, len(data)+1):
                 temp_list = list(data[i-1])
                 temp_list[0] = i
@@ -286,9 +296,9 @@ class Main(Login):
             events_data = self.cur.fetchall()
             for i in events_data:
                 self.builder.get_object("events_list").append([i[0],i[1].title(),i[2].title(),i[3],i[4].title()])
-            
 
-        
+
+
 
     #editable treeview
     def mem_name_edited(self, widget, path, text):
@@ -306,22 +316,22 @@ class Main(Login):
 
     def mem_post_edited(self, widget, path, text):
         if Login.mysql_flag:
-            self.edit_sql_data('members', path=path, col='post', text=text)   
+            self.edit_sql_data('members', path=path, col='post', text=text)
         else:
             with open("members.json", "r+") as f:
-                self.edit_json_data(f, path=path, col='post', text=text) 
+                self.edit_json_data(f, path=path, col='post', text=text)
 
     def mem_mob_edited(self, widget, path, text):
         if text.isdigit():
             if Login.mysql_flag:
-                self.edit_sql_data('members', path=path, col='mob_no', text=text)   
+                self.edit_sql_data('members', path=path, col='mob_no', text=text)
             else:
                 with open("members.json", "r+") as f:
                     self.edit_json_data(f, path=path, col='mob_no', text=text)
 
     def team_name_edited(self, widget, path, text):
         if Login.mysql_flag:
-            self.edit_sql_data('teams', path=path, col='team_name', text=text)   
+            self.edit_sql_data('teams', path=path, col='team_name', text=text)
         else:
             with open("teams.json", "r+") as f:
                 self.edit_json_data(f, path=path, col='team_name', text=text)
@@ -334,14 +344,14 @@ class Main(Login):
                 break
         else:
             if Login.mysql_flag:
-                self.edit_sql_data('teams', path=path, col='team_members', text=text)   
+                self.edit_sql_data('teams', path=path, col='team_members', text=text)
             else:
                 with open("teams.json", "r+") as f:
                     self.edit_json_data(f, path=path, col='team_members', text=text)
 
     def eve_name_edited(self, widget, path, text):
         if Login.mysql_flag:
-            self.edit_sql_data('events', path=path, col='name', text=text)   
+            self.edit_sql_data('events', path=path, col='name', text=text)
         else:
             with open("events.json", "r+") as f:
                 self.edit_json_data(f, path=path, col='name', text=text)
@@ -352,7 +362,7 @@ class Main(Login):
                 break
         else:
             if Login.mysql_flag:
-                self.edit_sql_data('events', path=path, col='domain', text=text)   
+                self.edit_sql_data('events', path=path, col='domain', text=text)
             else:
                 with open("events.json", "r+") as f:
                     self.edit_json_data(f, path=path, col='domain', text=text)
@@ -363,7 +373,7 @@ class Main(Login):
                 break
         else:
             if Login.mysql_flag:
-                self.edit_sql_data('events', path=path, col='part_no', text=text)   
+                self.edit_sql_data('events', path=path, col='part_no', text=text)
             else:
                 with open("events.json", "r+") as f:
                     self.edit_json_data(f, path=path, col='part_no', text=text)
@@ -376,7 +386,7 @@ class Main(Login):
                 break
         else:
             if Login.mysql_flag:
-                self.edit_sql_data('events', path=path, col='head', text=text)   
+                self.edit_sql_data('events', path=path, col='head', text=text)
             else:
                 with open("events.json", "r+") as f:
                     self.edit_json_data(f, path=path, col='head', text=text)
@@ -396,7 +406,7 @@ class Main(Login):
         else:
             with open("teams.json", "r+") as f:
                 self.edit_json_data(f)
-            
+
 
     def on_eve_del_clicked(self, widget):
         if Login.mysql_flag:
@@ -404,7 +414,7 @@ class Main(Login):
         else:
             with open("events.json", "r+") as f:
                 self.edit_json_data(f)
-            
+
 
 
     #selection handlers
@@ -455,7 +465,7 @@ class Main(Login):
                         data.append({"s_no":len(data)+1,"name":new_mem_name,"post":new_mem_post,"mob_no":new_mem_mob_no})
                         self.edit_json_data(f, data=data)
                 self.builder.get_object('mem_dia').hide()
-                
+
 
 
     def on_team_dia_apply_clicked(self, widget):
@@ -467,7 +477,7 @@ class Main(Login):
                 for j in i:
                     if j.lower() not in 'abcdefghijklmnopqrstuvwxyz ':
                         self.builder.get_object("team_wrong").set_text("!! Malformed Member Names !!")
-                        flag = True                              
+                        flag = True
         if not flag:
             if Login.mysql_flag:
                 self.cur.execute(f'SELECT * FROM teams')
@@ -480,7 +490,7 @@ class Main(Login):
                     data.append({"s_no":len(data)+1,"team_name":new_team_name,"team_members":new_team_members})
                     self.edit_json_data(f, data=data)
             self.builder.get_object('team_dia').hide()
-            
+
     def on_eve_dia_apply_clicked(self, widget):
         new_eve_name = self.builder.get_object("new_eve_name").get_text().lower()
         new_eve_domain = self.builder.get_object("new_eve_domain").get_text().lower()
@@ -494,7 +504,7 @@ class Main(Login):
                 self.builder.get_object("eve_wrong").set_text("!! Malformed Domain !!")
                 print(not (i in '0123456789-' ), (new_eve_domain != "open"))
                 break
-            elif j != None and new_eve_domain != None: 
+            elif j != None and new_eve_domain != None:
                 if j not in '0123456789+':
                     self.builder.get_object("eve_wrong").set_text("!! Malformed No. of Participants !!")
                     break
@@ -523,14 +533,4 @@ class Main(Login):
 
 if __name__ == "__main__":
     main = Login()
-    gtk.main()    
-
-
-
-
-
-
-# cur.execute("CREATE TABLE members (s_no int, name varchar(255), post varchar(255), mob_no varchar(255))")
-# cur.execute("CREATE TABLE teams (s_no int, team_name varchar(255), team_members varchar(255))")
-# cur.execute("CREATE TABLE events (s_no int, name varchar(255), domain varchar(255), part_no varchar(255), head varchar(255))")
-
+    gtk.main()

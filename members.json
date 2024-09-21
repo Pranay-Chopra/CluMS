@@ -1,86 +1,86 @@
 [
     {
         "s_no": 1,
-        "name": "prateek rout",
-        "post": "pranay",
-        "mob_no": "8178731156"
-    },
-    {
-        "s_no": 2,
         "name": "akash niranjan",
         "post": "secretary",
         "mob_no": "8076875114"
     },
     {
-        "s_no": 3,
+        "s_no": 2,
         "name": "neil virmani",
         "post": "vice secretary",
         "mob_no": "8527975573"
     },
     {
-        "s_no": 4,
+        "s_no": 3,
         "name": "abhishek kanojia",
         "post": "digital manager",
         "mob_no": "7827239691"
     },
     {
-        "s_no": 5,
+        "s_no": 4,
         "name": "gitansh khurana",
         "post": "deputy president",
         "mob_no": "8178795277"
     },
     {
-        "s_no": 6,
+        "s_no": 5,
         "name": "mehul jain",
         "post": "member",
         "mob_no": "8851487448"
     },
     {
-        "s_no": 7,
+        "s_no": 6,
         "name": "aryan gupta",
         "post": "member",
         "mob_no": "9958286427"
     },
     {
-        "s_no": 8,
+        "s_no": 7,
         "name": "utkarsh tiwari",
         "post": "member",
         "mob_no": "9650562424"
     },
     {
-        "s_no": 9,
+        "s_no": 8,
         "name": "gunvir singh",
         "post": "member",
         "mob_no": "9650500426"
     },
     {
-        "s_no": 10,
+        "s_no": 9,
         "name": "md. shezan",
         "post": "member",
         "mob_no": "7303490299"
     },
     {
-        "s_no": 11,
+        "s_no": 10,
         "name": "priyansh nagar",
         "post": "member",
         "mob_no": "9451611788"
     },
     {
-        "s_no": 12,
+        "s_no": 11,
         "name": "haniya ansari",
         "post": "member",
         "mob_no": "9773550141"
     },
     {
-        "s_no": 13,
+        "s_no": 12,
         "name": "aryan chaturvedi",
         "post": "member",
         "mob_no": "8588879137"
     },
     {
-        "s_no": 14,
+        "s_no": 13,
         "name": "rakin anwar",
         "post": "member",
         "mob_no": "8459169139"
+    },
+    {
+        "s_no": 14,
+        "name": "sunny",
+        "post": "emotional support",
+        "mob_no": "9810511201"
     }
 ]
